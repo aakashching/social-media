@@ -15,7 +15,6 @@ const userPng =
   const regexUserName = /^(?!.*\.\.)(?!.*\.$)[^\W][\w.]{0,29}$/;
 router.get('/:username', async(req,res)=> {
     const {username} = req.params
-    console.log(req.params)
     try {
 
         if(username.length<1) return res.status(401).send('invalid')
@@ -42,7 +41,6 @@ router.post('/', async(req,res)=>{
         twitter,
         instagram
     } = req.body.user
-    console.log(req.body.user)
     if(!isEmail(email)) return res.status(401).send('invalid Email')
     if(password.length<6) return res.status(401).send('password must be atleast six characters')
     try{
@@ -72,7 +70,7 @@ router.post('/', async(req,res)=>{
         await new ChatModel({user: user._id, chats: []}).save()
 
         const payload = {userId: user._id}
-        jwt.sign(payload,process.env.JWT_SECRET,{expiresIn: '2d'},(err,token)=> {
+        jwt.sign(payload,process.env.JWT_SECRET,{expiresIn: '168h'},(err,token)=> {
             if(err) throw err
             return res.status(201).json(token)
         })

@@ -46,12 +46,12 @@ const Notifications = ({
               }}
             >
               <Feed size="small">
-                {notifications.map((notification) => (
+                {notifications.map((notification, i) => (
                   <>
                     {notification.type === "newLike" &&
                       notification.post !== null && (
                         <LikeNotification
-                          key={notification._id}
+                          key={i}
                           user={user}
                           notification={notification}
                         />
@@ -59,13 +59,13 @@ const Notifications = ({
                     {notification.type === "newComment" &&
                       notification.post !== null && (
                         <CommentNotification
-                          key={notification._id}
+                          key={i}
                           notification={notification}
                         />
                       )}
                     {notification.type === "newFollower" && (
                       <FollowNotificaton
-                        key={notification._id}
+                        key={i}
                         notification={notification}
                         loggedUserFollowStats={loggedUserFollowStats}
                         setUserFollowStats={setUserFollowStats}

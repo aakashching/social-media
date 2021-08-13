@@ -73,11 +73,12 @@ const Messages = ({ chatsData, user, errorLoading }) => {
         messagesWith: router.query.message,
       });
       socket.current.on("messagesLoaded", ({ chat }) => {
-        console.log(chat);
+        
         setMessages(chat.messages);
         setBannerData({
           name: chat.messagesWith.name,
           profilePicUrl: chat.messagesWith.profilePicUrl,
+          userId:router.query.message
         });
         openChatId.current = chat.messagesWith._id;
         divRef.current && scrollDivToBottom(divRef);
@@ -85,7 +86,7 @@ const Messages = ({ chatsData, user, errorLoading }) => {
 
       socket.current.on("noChatFound", async () => {
         const { name, profilePicUrl } = await getUserInfo(router.query.message);
-        setBannerData({ name, profilePicUrl });
+        setBannerData({ name, profilePicUrl, userId:router.query.message });
         setMessages([]);
         openChatId.current = router.query.message;
       });
@@ -246,7 +247,7 @@ const Messages = ({ chatsData, user, errorLoading }) => {
                   >
                     <>
                       <div style={{ position: "sticky", top: "0" }}>
-                        <Banner bannerData={bannerData} />
+                        <Banner bannerData={bannerData} connectedUsers={connectedUsers} />
                       </div>
                       {messages.length > 0 && (
                         <>

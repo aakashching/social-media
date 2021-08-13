@@ -1,11 +1,12 @@
 import React, { useState } from "react";
 import { Icon, Popup } from "semantic-ui-react";
 import calculateTime from "../../utils/calculateTime";
+import classes from './Message.module.css'
 const Message = ({ message, user, bannerProfilePic, divRef, deleteMsg }) => {
   const [deleteIcon, showDeleteIcon] = useState(false);
   const ifYouSender = message.sender === user._id;
   return (
-    <div className="bubbleWrapper" ref={divRef} >
+    <div className={`bubbleWrapper ${classes.scroller}`} ref={divRef} >
       <div
         className={ifYouSender ? "inlineContainer own" : "inlineContainer"}
         onClick={() => ifYouSender && showDeleteIcon(!deleteIcon)}

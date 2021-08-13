@@ -30,9 +30,9 @@ router.post('/',async(req,res)=>{
     try{
        const user =await UserModel.findOne({email: email.toLowerCase()}).select('+password')
         if(!user) return res.status(401).send('Invalid Credentials')
-        console.log(user)
+
         const isPassword = await bcrypt.compare(password, user.password)
-        console.log(isPassword)
+     
         if(!isPassword) return res.status(401).send('Invalid Credentials')
         
         const notificationModel = await NotificationModel.findOne({user: user._id})
@@ -44,7 +44,7 @@ router.post('/',async(req,res)=>{
             await new ChatModel({user: user._id, chats: []}).save()
         }
         const payload = {userId: user._id}
-        jwt.sign(payload,process.env.JWT_SECRET,{expiresIn: '2d'},(err,token)=> {
+        jwt.sign(payload,process.env.JWT_SECRET,{expiresIn: '168h'},(err,token)=> {
             if(err) throw err
             return res.status(201).json(token)
         })

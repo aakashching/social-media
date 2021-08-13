@@ -26,7 +26,7 @@ const SearchComponent = () => {
         }),
       });
 
-      if (res.data === 0) return setLoading(false);
+      if (res.data === 0) setLoading(false);
       setResults(res.data);
     } catch (error) {
       console.log("error serching");
