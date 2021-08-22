@@ -9,6 +9,7 @@ import {
   Comment,
   Grid,
   Icon,
+  Modal
 } from "semantic-ui-react";
 import Chat from "../components/Chats/Chat";
 import ChatsSearch from "../components/Chats/ChatsSearch";
@@ -21,6 +22,7 @@ import Banner from "../components/Messages/Banner";
 import getUserInfo from "../utils/getUserInfo";
 import newMsgSound from "../utils/newMsgSound";
 import cookie from "js-cookie";
+import classes from '../components/Messages/MessageModal.module.css'
 const scrollDivToBottom = (divRef) => {
   divRef.current !== null &&
     divRef.current.scrollIntoView({ behaviour: "smooth" });
@@ -73,12 +75,11 @@ const Messages = ({ chatsData, user, errorLoading }) => {
         messagesWith: router.query.message,
       });
       socket.current.on("messagesLoaded", ({ chat }) => {
-        
         setMessages(chat.messages);
         setBannerData({
           name: chat.messagesWith.name,
           profilePicUrl: chat.messagesWith.profilePicUrl,
-          userId:router.query.message
+          userId: router.query.message,
         });
         openChatId.current = chat.messagesWith._id;
         divRef.current && scrollDivToBottom(divRef);
@@ -86,7 +87,7 @@ const Messages = ({ chatsData, user, errorLoading }) => {
 
       socket.current.on("noChatFound", async () => {
         const { name, profilePicUrl } = await getUserInfo(router.query.message);
-        setBannerData({ name, profilePicUrl, userId:router.query.message });
+        setBannerData({ name, profilePicUrl, userId: router.query.message });
         setMessages([]);
         openChatId.current = router.query.message;
       });
@@ -199,6 +200,7 @@ const Messages = ({ chatsData, user, errorLoading }) => {
       console.log(error);
     }
   };
+
   return (
     <Segment basic size="large" style={{ marginTop: "5px" }} padded>
       <Header
@@ -233,42 +235,52 @@ const Messages = ({ chatsData, user, errorLoading }) => {
                 </Segment>
               </Comment.Group>
             </Grid.Column>
-            <Grid.Column width={12}>
+            
               {router.query.message && (
                 <>
-                  <div
-                    style={{
-                      overflow: "auto",
-                      overflowX: "hidden",
-                      maxHeight: "35rem",
-                      height: "35rem",
-                      backgroundColor: "whitesmoke",
-                    }}
+                  <Modal
+                    open={openChatId}
+                    size="fullscreen"
+                    onClose={() => router.replace("/messages")}
+                    closeIcon
                   >
-                    <>
-                      <div style={{ position: "sticky", top: "0" }}>
-                        <Banner bannerData={bannerData} connectedUsers={connectedUsers} />
-                      </div>
-                      {messages.length > 0 && (
-                        <>
-                          {messages.map((message, i) => (
-                            <Message
-                              divRef={divRef}
-                              key={i}
-                              bannerProfilePic={bannerData.profilePicUrl}
-                              message={message}
-                              user={user}
-                              deleteMsg={deleteMsg}
-                            />
-                          ))}
-                        </>
-                      )}
-                    </>
-                  </div>
-                  <MessageInputField sendMsg={sendMsg} />
+                    <div
+                      style={{
+                        overflow: "auto",
+                        overflowX: "hidden",
+                        maxHeight: "93%",
+                        height: "45rem",
+                        width: '100%'
+                      }}
+                      className={classes.msgBox}
+                    >
+                      <>
+                        <div style={{ position: "sticky", top: "0" }}>
+                          <Banner
+                            bannerData={bannerData}
+                            connectedUsers={connectedUsers}
+                          />
+                        </div>
+                        {messages.length > 0 && (
+                          <>
+                            {messages.map((message, i) => (
+                              <Message
+                                divRef={divRef}
+                                key={i}
+                                bannerProfilePic={bannerData.profilePicUrl}
+                                message={message}
+                                user={user}
+                                deleteMsg={deleteMsg}
+                              />
+                            ))}
+                          </>
+                        )}
+                      </>
+                    </div>
+                    <MessageInputField sendMsg={sendMsg} />
+                  </Modal>
                 </>
               )}
-            </Grid.Column>
           </Grid>
         </>
       ) : (

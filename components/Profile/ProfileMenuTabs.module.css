@@ -6,6 +6,7 @@
 }
 .tab::-webkit-scrollbar {
     display: none;
+    background-color: rgba(0, 0,0,0);
 }
 .tab {
     -ms-overflow-style: none;

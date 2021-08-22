@@ -23,7 +23,11 @@ const removeUser=async (socketId)=>{
     await users.splice(indexOf,1)
     return {status: 'disconneted!'}
 }
+const removeUserId=async userId =>{
+    users = users.filter(user=> user.userId!==userId)
+
+}
 
 const findConnectedUser= async (userId)=> users.find(user=> user.userId===userId)
 
-module.exports={addUser,removeUser, findConnectedUser}
+module.exports={addUser,removeUser, findConnectedUser, removeUserId}

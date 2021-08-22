@@ -12,12 +12,12 @@ const ProfileMenuTabs = ({
 }) => {
 
   const divRef= useRef()
-  const scrollDiv = (scrollOffset) => {
-      (divRef.current.scrollLeft += scrollOffset);
+  const scrollDiv = () => {
+      (divRef.current.scrollIntoView);
   };
   return (
     <div style={{overflow: 'hidden'}}>
-    <Menu compact secondary pointing style={{maxWidth: '100%'}} className={classes.tab} ref={divRef} >
+    <Menu compact secondary pointing style={{maxWidth: '100%'}} className={classes.tab} >
       <Menu.Item
         name="profile"
         active={activeItem === "profile"}
@@ -65,7 +65,8 @@ const ProfileMenuTabs = ({
           <Menu.Item
             name="Update Profile"
             active={activeItem === "updateProfile"}
-            onClick={() => handleItemClick("updateProfile") && scrollDiv(30)}
+            onClick={() => handleItemClick("updateProfile") && scrollDiv()}
+            ref={divRef}
           />
           <Menu.Item
             name="Settings"

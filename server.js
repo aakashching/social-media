@@ -12,6 +12,7 @@ const {
   addUser,
   removeUser,
   findConnectedUser,
+  removeUserId,
 } = require("./utilsServer/roomActions");
 const {
   loadMessages,
@@ -97,6 +98,7 @@ io.on("connection", (socket) => {
 
   socket.on("disconnected", async () => {
     const { status } = await removeUser(socket.id);
+    // await removeUserId(userId)
     console.log(`socket ${status}`);
   });
 });

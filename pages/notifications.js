@@ -27,8 +27,7 @@ const Notifications = ({
         console.error(error);
       }
     };
-     notificationRead();
-    
+    notificationRead();
   }, []);
 
   return (
@@ -42,7 +41,7 @@ const Notifications = ({
                 overflow: "auto",
                 height: "40rem",
                 position: "relative",
-                width: '100%'
+                width: "100%",
               }}
             >
               <Feed size="small">
@@ -51,7 +50,7 @@ const Notifications = ({
                     {notification.type === "newLike" &&
                       notification.post !== null && (
                         <LikeNotification
-                          key={i}
+                          key={notification._id}
                           user={user}
                           notification={notification}
                         />
@@ -59,13 +58,13 @@ const Notifications = ({
                     {notification.type === "newComment" &&
                       notification.post !== null && (
                         <CommentNotification
-                          key={i}
+                          key={notification._id}
                           notification={notification}
                         />
                       )}
                     {notification.type === "newFollower" && (
                       <FollowNotificaton
-                        key={i}
+                        key={notification._id}
                         notification={notification}
                         loggedUserFollowStats={loggedUserFollowStats}
                         setUserFollowStats={setUserFollowStats}

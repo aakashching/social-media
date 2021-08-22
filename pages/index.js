@@ -43,7 +43,7 @@ const HomePage = ({ user, postData, errorLoading }) => {
             senderName: name,
             senderProfilePic: profilePicUrl,
           });
-          showNewMsgModal(true)
+          showNewMsgModal(true);
           newMsgSound(name);
         }
       });
@@ -57,6 +57,21 @@ const HomePage = ({ user, postData, errorLoading }) => {
       };
     }
   }, []);
+
+    // if (document.visibilityState === "visible") {
+    //   if(socket.current) {
+    //     socket.current.emit("join", { userId: user._id });
+    //   }
+    // }
+
+    // if (document.visibilityState !== "visible") {
+    //   if(socket.current) {
+    //     socket.current.emit("disconnected");
+    //     socket.current.off();
+    //   }
+    // }
+  
+
   useEffect(() => {
     showToastr && setTimeout(() => setShowToastr(false), 3000);
   }, [showToastr]);
@@ -66,7 +81,7 @@ const HomePage = ({ user, postData, errorLoading }) => {
         "newNotificationRecevied",
         ({ name, profilePicUrl, username, postId }) => {
           setNewNotification({ name, profilePicUrl, username, postId });
-          showNotificationPopup(true)
+          showNotificationPopup(true);
         }
       );
     }
