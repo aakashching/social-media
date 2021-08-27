@@ -44,7 +44,7 @@ router.post('/',async(req,res)=>{
             await new ChatModel({user: user._id, chats: []}).save()
         }
         const payload = {userId: user._id}
-        jwt.sign(payload,process.env.JWT_SECRET,{expiresIn: '168h'},(err,token)=> {
+        jwt.sign(payload,process.env.JWT_SECRET,{expiresIn: '48h'},(err,token)=> {
             if(err) throw err
             return res.status(201).json(token)
         })

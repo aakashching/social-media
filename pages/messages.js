@@ -217,7 +217,7 @@ const Messages = ({ chatsData, user, errorLoading }) => {
       {chats.length > 0 ? (
         <>
           <Grid stackable>
-            <Grid.Column width={4}>
+            <Grid.Column width='10'>
               <Comment.Group size="big">
                 <Segment
                   raised
@@ -240,7 +240,7 @@ const Messages = ({ chatsData, user, errorLoading }) => {
                 <>
                   <Modal
                     open={openChatId}
-                    size="fullscreen"
+                    size='large'
                     onClose={() => router.replace("/messages")}
                     closeIcon
                   >
