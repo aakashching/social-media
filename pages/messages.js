@@ -248,7 +248,7 @@ const Messages = ({ chatsData, user, errorLoading }) => {
                       style={{
                         overflow: "auto",
                         overflowX: "hidden",
-                        maxHeight: "93%",
+                        maxHeight: "75%",
                         height: "45rem",
                         width: '100%'
                       }}
