@@ -5,7 +5,12 @@ const UserModel = require("../models/UserModel");
 const FollowerModel = require("../models/FollowerModel");
 const PostModel = require("../models/PostModel");
 const uuid = require("uuid").v4;
-const {newLikeNotification,removeLikeNotification, newCommentNotification,removeCommetNotification} = require('../utilsServer/NotificationActions')
+const {
+  newLikeNotification,
+  removeLikeNotification,
+  newCommentNotification,
+  removeCommetNotification,
+} = require("../utilsServer/NotificationActions");
 
 //  CREATE A POST
 router.post("/", authMiddleware, async (req, res) => {
@@ -67,15 +72,20 @@ router.get("/", authMiddleware, async (req, res) => {
       for (i = 0; i < loggedUser.following.length; i++) {
         const foundPostFromFollowing = posts.filter(
           (post) =>
-            post.user._id.toString() ===
-              loggedUser.following[i].user.toString()
+            post.user._id.toString() === loggedUser.following[i].user.toString()
         );
-        if (foundPostFromFollowing.length > 0) postToBeSent.push(...foundPostFromFollowing);
+        if (foundPostFromFollowing.length > 0)
+          postToBeSent.push(...foundPostFromFollowing);
       }
-      const foundOwnPosts= posts.filter(post=>post.user._id.toString()===userId)
-      if(foundOwnPosts.length>0) postToBeSent.push(...foundOwnPosts)
+      const foundOwnPosts = posts.filter(
+        (post) => post.user._id.toString() === userId
+      );
+      if (foundOwnPosts.length > 0) postToBeSent.push(...foundOwnPosts);
     }
-    postToBeSent.length>0 && postToBeSent.sort((a,b)=>[new Date(b.createdAt) - new Date(a.createdAt)])
+    postToBeSent.length > 0 &&
+      postToBeSent.sort((a, b) => [
+        new Date(b.createdAt) - new Date(a.createdAt),
+      ]);
     return res.json(postToBeSent);
   } catch (error) {
     console.error(error);
@@ -87,7 +97,9 @@ router.get("/", authMiddleware, async (req, res) => {
 router.get("/:postId", authMiddleware, async (req, res) => {
   const { postId } = req.params;
 
-  const post = await PostModel.findById(postId).populate('user').populate('comments.user');
+  const post = await PostModel.findById(postId)
+    .populate("user")
+    .populate("comments.user");
   if (!post) return res.status(404).send("Post Not Found!");
 
   return res.json(post);
@@ -132,8 +144,8 @@ router.post("/like/:postId", authMiddleware, async (req, res) => {
     await post.likes.unshift({ user: userId });
     await post.save();
 
-    if(post.user.toString() !== userId) {
-      await newLikeNotification(userId,postId,post.user.toString())
+    if (post.user.toString() !== userId) {
+      await newLikeNotification(userId, postId, post.user.toString());
     }
 
     return res.status(200).send("post liked");
@@ -153,12 +165,14 @@ router.put("/unlike/:postId", authMiddleware, async (req, res) => {
     const isLiked =
       post.likes.filter((like) => like.user.toString() === userId).length === 0;
     if (isLiked) return res.status(401).send("post not liked before");
-    const index = post.likes.map((like) => like.user.toString()).indexOf();
+    const index = post.likes
+      .map((like) => like.user.toString())
+      .indexOf(userId);
     await post.likes.splice(index, 1);
 
     await post.save();
-    if(post.user.toString() !== userId) {
-      await removeLikeNotification(userId,postId,post.user.toString())
+    if (post.user.toString() !== userId) {
+      await removeLikeNotification(userId, postId, post.user.toString());
     }
     return res.status(200).send("post unliked");
   } catch (error) {
@@ -201,8 +215,14 @@ router.post("/comment/:postId", authMiddleware, async (req, res) => {
     };
     await post.comments.unshift(newComment);
     await post.save();
-    if(post.user.toString() !== userId) {
-      await newCommentNotification(postId,newComment._id,userId,post.user.toString(),text)
+    if (post.user.toString() !== userId) {
+      await newCommentNotification(
+        postId,
+        newComment._id,
+        userId,
+        post.user.toString(),
+        text
+      );
     }
     return res.status(200).json(newComment._id);
   } catch (error) {
@@ -231,8 +251,13 @@ router.delete("/:postId/:commentId", authMiddleware, async (req, res) => {
       await post.comments.splice(indexOf, 1);
       await post.save();
 
-      if(post.user.toString() !== userId) {
-        await removeCommetNotification(postId,commentId,userId,post.user.toString())
+      if (post.user.toString() !== userId) {
+        await removeCommetNotification(
+          postId,
+          commentId,
+          userId,
+          post.user.toString()
+        );
       }
       return res.status(200).send("Scussfully Deleted");
     };
