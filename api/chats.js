@@ -52,7 +52,7 @@ router.delete("/:messagesWith", authMiddleware, async (req, res) => {
     // if (!chatToDelete) return res.status(404).send("NO Chat Found");
     const indexOf = user.chats
       .map((chat) => chat.messagesWith.toString())
-      .indexOf(messagesWith);
+      .indexOf(messagesWith.toString());
     await user.chats.splice(indexOf, 1);
     await user.save();
     return res.status(200).send("Chat Deleted");

@@ -148,7 +148,7 @@ const Messages = ({ chatsData, user, errorLoading }) => {
                 (chat) => chat.messagesWith === newMsg.sender
               );
               previousChat.lastMessage = newMsg.msg;
-              previousChat.data = newMsg.date;
+              previousChat.dat = newMsg.date;
               senderName = previousChat.name;
               return [...prev];
             });
