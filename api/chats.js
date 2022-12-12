@@ -45,11 +45,11 @@ router.delete("/:messagesWith", authMiddleware, async (req, res) => {
     const messagesWith = req.params;
 
     const user = await ChatModel.findOne({ user: userId });
-    // const chatToDelete = user.chats.find(
-    //   (chat) => chat.messagesWith.toString() === messagesWith
-    // );
-    // console.log(chatToDelete)
-    // if (!chatToDelete) return res.status(404).send("NO Chat Found");
+    const chatToDelete = user.chats.find(
+      (chat) => chat.messagesWith.toString() === messagesWith
+    );
+    console.log(chatToDelete)
+    if (!chatToDelete) return res.status(404).send("NO Chat Found");
     const indexOf = user.chats
       .map((chat) => chat.messagesWith.toString())
       .indexOf(messagesWith.toString());
