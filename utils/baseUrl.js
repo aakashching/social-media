@@ -1,5 +1,5 @@
 const baseUrl =
   process.env.NODE_ENV !== "production"
     ? "http://localhost:3000"
-    : "https://social-media-production-a1ca.up.railway.app";
+    : "https://mini-social-media.up.railway.app";
 module.exports = baseUrl;
